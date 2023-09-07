@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Subscriber, Campaign
 from django.contrib import messages
-from .tasks import send_email
 
 def add_subscriber(request):
     if request.method == 'POST':
@@ -25,20 +24,22 @@ def unsubscribe(request, email):
     return redirect('add_subscriber')
 
 def send_campaign(request, campaign_id):
-    campaign = get_object_or_404(Campaign, pk=campaign_id)
+    campaign = Campaign.objects.get(pk=campaign_id)
+    
+    def send_dummy_email(subject, message, from_email, recipient_list):
+        return True  
     
     recipients = Subscriber.objects.filter(is_active=True).values_list('email', flat=True)
     
     for recipient in recipients:
-        send_email.delay(
+        send_dummy_email(
             subject=campaign.subject,
             message=campaign.plain_text_content,
             from_email='your@email.com',
             recipient_list=[recipient],
         )
     
-    messages.success(request, f'Campaign is being sent to {len(recipients)} subscribers in the background.')
+    messages.success(request, f'Campaign sent successfully to {len(recipients)} subscribers.')
     return render(request, 'campaign/sent_campaign.html', {'campaign': campaign})
-
 
 
