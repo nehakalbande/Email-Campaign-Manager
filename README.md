@@ -21,5 +21,15 @@ Email Campaign Manager is a Python-based web application built using the Django 
 2. Access the Django Admin Interface:
 
   ```bash
-   Open a web browser and go to http://127.0.0.1:8000/admin/
+   Open a web browser and go to http://127.0.0.1:8000/admin/ 
+   ```
+
+## Usage
+
+   - Add subscribers: Use the ``` /campaign/add-subscriber/ ``` API endpoint or the Django Admin interface.
+   - Unsubscribe users: Use the ``` /campaign/unsubscribe/<str:email>/ ``` API endpoint.
+   - Send campaigns: Use the ``` /campaign/send-campaign/<int:campaign_id>/ ``` API endpoint (with a dummy function for now).
+   - Manage subscribers and campaigns through the Django Admin interface.
+
+
 
